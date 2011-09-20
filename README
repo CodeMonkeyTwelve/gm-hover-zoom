@@ -1,7 +1,12 @@
 = Description
 
-GreaseMonkey port of the Chrome HoverZoom plugin (https://chrome.google.com/webstore/detail/nonjdcjchghhkdoolnlbekcfllmednbl).
+Scriptish/GreaseMonkey port of the Chrome HoverZoom plugin 
+Chrome Store: https://chrome.google.com/webstore/detail/nonjdcjchghhkdoolnlbekcfllmednbl
+Google Code Repository: https://code.google.com/p/hoverzoom/
 
-It's super alpha, but works.
+Original conversion by Jon Moses ( https://github.com/jmoses/gm-hover-zoom )
 
 *Only the Imgur plugin is in there, so only imgur links will work right now.*
+
+My goal is to retain as much common code as possible with the google code repository to allow me to merge code changes more easily.
+
