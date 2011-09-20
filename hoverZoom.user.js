@@ -3,18 +3,52 @@
 // @version 0.0.2
 // @include http://*
 // @include https://*
-// @namespace http://github.com/jmoses
-// @require http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js
-// @require http://documentcloud.github.com/underscore/underscore-min.js
-// @require http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js
+// @namespace http://github.com/CodeMonkeyTwelve
+// @require https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js
+// @require https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js
 // ==/UserScript==
 
+// Chrome stub to allow for easier merging of changes from google code.
+var chrome = (function (){
+	var loading_gif = "data:application/octet-stream;base64,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%3D%3D",
+	// properties
+	extension = {
+		inIncognitoTab : false
+	};
+	// nulled functions
+	extension.sendRequest = function(firstparam, jzCallback){
+		if(firstparam['action'] !== 'getOptions'){
+			return;
+		}
+		var options = {};
+		options.extensionEnabled	= options.hasOwnProperty('extensionEnabled')	? options.extensionEnabled : true;
+		options.pageActionEnabled   = options.hasOwnProperty('pageActionEnabled')   ? options.pageActionEnabled : true;
+		options.showCaptions		= options.hasOwnProperty('showCaptions')		? options.showCaptions : true;
+		options.showHighRes		 = options.hasOwnProperty('showHighRes')		 ? options.showHighRes : false;
+		options.addToHistory		= options.hasOwnProperty('addToHistory')		? options.addToHistory : false;
+		options.alwaysPreload	   = options.hasOwnProperty('alwaysPreload')	   ? options.alwaysPreload : false;
+		options.displayDelay		= options.hasOwnProperty('displayDelay')		? options.displayDelay : 100;
+		options.fadeDuration		= options.hasOwnProperty('fadeDuration')		? options.fadeDuration : 200;
+		options.excludedSites	   = options.hasOwnProperty('excludedSites')	   ? options.excludedSites : [];
+		options.whiteListMode	   = options.hasOwnProperty('whiteListMode')	   ? options.whiteListMode : false;
+		options.picturesOpacity	 = options.hasOwnProperty('picturesOpacity')	 ? options.picturesOpacity : 1;
+		options.showWhileLoading	= options.hasOwnProperty('showWhileLoading')	? options.showWhileLoading : true;
+		options.expAlwaysFullZoom   = options.hasOwnProperty('expAlwaysFullZoom')   ? options.expAlwaysFullZoom : false;
+		options.actionKey		   = options.hasOwnProperty('actionKey')		   ? options.actionKey : 0;
+		options.fullZoomKey		 = options.hasOwnProperty('fullZoomKey')		 ? options.fullZoomKey : 90;
+		jzCallback(options);
+		return options; //for debugging.
+	};
+	extension.getURL = function(ignored){ return loading_gif; };
+	extension.onRequest = function(ignored){};
+	extension.onRequest.addListener = function(ignored){};
+	return {extension:extension};
+}());
+console.log("Initializing...");
 
 // HoverZoom Start
 // Copyright (c) 2011 Romain Vallet <romain.vallet@gmail.com>
 // Licensed under the MIT license, read license.txt
-
-console.log("Initializing...");
 
 var hoverZoomPlugins = hoverZoomPlugins || [];
 
@@ -98,7 +132,11 @@ var hoverZoom = {
 			if (!imgFullSize) {
 				return;
 			}
-			position = position || {top: mousePos.top, left: mousePos.left};
+			if(position.top === undefined || position.left === undefined){
+				//console.log("using last remembered mouse coordinates");
+				position = {top: mousePos.top, left: mousePos.left};
+			}
+			//console.log("posImg start: ", position.top, position.left);
 			
 			var offset = 20,
 				padding = 10,
@@ -371,11 +409,11 @@ var hoverZoom = {
 			// The image size is not yet available in the onload so I have to delay the positioning
 			setTimeout(posImg, options.showWhileLoading ? 0 : 10);
 			
-			//if (options.addToHistory && !chrome.extension.inIncognitoTab) {
-			//	chrome.extension.sendRequest({action: 'addUrlToHistory', url: hz.currentLink.context.href});
-			//}
-			//chrome.extension.sendRequest({action: 'trackEvent', event: {category: 'Actions', action: 'ImageDisplayedOnSite', label: document.location.host}});
-			//chrome.extension.sendRequest({action: 'trackEvent', event: {category: 'Actions', action: 'ImageDisplayedFromSite', label: imgHost}});
+			if (options.addToHistory && !chrome.extension.inIncognitoTab) {
+				chrome.extension.sendRequest({action: 'addUrlToHistory', url: hz.currentLink.context.href});
+			}
+			chrome.extension.sendRequest({action: 'trackEvent', event: {category: 'Actions', action: 'ImageDisplayedOnSite', label: document.location.host}});
+			chrome.extension.sendRequest({action: 'trackEvent', event: {category: 'Actions', action: 'ImageDisplayedFromSite', label: imgHost}});
 		}
 
 		function imgFullSizeOnError() {
@@ -394,7 +432,7 @@ var hoverZoom = {
 					hideHoverZoomImg();
 					//hz.currentLink.removeClass('hoverZoomLink').removeData();
 					console.warn('[HoverZoom] Failed to load image: ' + imgSrc);
-					//chrome.extension.sendRequest({action: 'trackEvent', event: {category: 'Errors', action: 'LoadingErrorFromSite', label: imgHost}});
+					chrome.extension.sendRequest({action: 'trackEvent', event: {category: 'Errors', action: 'LoadingErrorFromSite', label: imgHost}});
 				}
 			}
 		}
@@ -490,44 +528,53 @@ var hoverZoom = {
 				}
 			});
 			
-			//if (options.pageActionEnabled && !pageActionShown && showPageAction) {
-			//	chrome.extension.sendRequest({action : 'showPageAction'});
-			//	pageActionShown = true;
-			//}
+			if (options.pageActionEnabled && !pageActionShown && showPageAction) {
+				chrome.extension.sendRequest({action : 'showPageAction'});
+				pageActionShown = true;
+			}
 		}
 		
 		function prepareImgLinks() {
-      console.log("in prepareImgLinks()");
+			//console.log("in prepareImgLinks()");
 			//console.time('prepareImgLinks');
 			pageActionShown = false;
 			
 			// Commented this out in version 2.9 for better performances. Keep an eye on it for potential side effects.
 			//$('.hoverZoomLink').removeClass('hoverZoomLink').removeData('hoverZoomSrc');
 			
-      console.log("starting plugin processing");
+				//console.log("starting plugin processing");
 			for (var i = 0; i < hoverZoomPlugins.length; i++) {
-        console.log(" running plugin", hoverZoomPlugins[i].name);
+				//console.log(" running plugin", hoverZoomPlugins[i].name);
 				hoverZoomPlugins[i].prepareImgLinks(imgLinksPrepared);
 			}
 			prepareImgLinksTimeout = null;
 			
-      console.log(" trying to preload", options.alwaysPreload);
-			if (true) { //options.alwaysPreload) {
+			//console.log(" trying to preload", options.alwaysPreload);
+			if (options.alwaysPreload) {
 				clearTimeout(preloadTimeout);
 				preloadTimeout = setTimeout(hz.preloadImages, 800);
 			} else {
 				chrome.extension.sendRequest({action : 'preloadAvailable'});
 			}
 			
-
-      console.log("preapring downscaled images");
-			prepareDownscaledImages();
+			//console.log("preapring downscaled images");
+			prepareDownscaledImagesAsync();
 			//console.timeEnd('prepareImgLinks');
 			
 		}
 		
+		var prepareDownscaledImagesDelay = 500, prepareDownscaledImagesTimeout;
+		function prepareDownscaledImagesAsync(dontResetDelay) {
+			if (!dontResetDelay) {
+				prepareDownscaledImagesDelay = 500;
+			}
+			clearTimeout(prepareDownscaledImagesTimeout);
+			prepareDownscaledImagesTimeout = setTimeout(prepareDownscaledImages, prepareDownscaledImagesDelay);
+			prepareDownscaledImagesDelay *= 2;
+		}
+		
 		function prepareDownscaledImages() {
-      console.log("in prepareDownscaledImages");
+			//console.log("in prepareDownscaledImages");
 			$('img').filter(function () {
 				var _this = $(this);
 				
@@ -562,11 +609,11 @@ var hoverZoom = {
 					}, 10);
 				}).attr('src', this.src);
 			});
-      console.log(" done");
 		}
 		
 		var prepareImgLinksDelay = 500, prepareImgLinksTimeout;
 		function prepareImgLinksAsync(dontResetDelay) {
+			//console.log("in prepareImgLinksAsync");
 			if (!options.extensionEnabled || isExcludedSite()) {
 				return;
 			}
@@ -588,7 +635,7 @@ var hoverZoom = {
 		}
 		
 		function applyOptions() {
-      console.log("in applyOptions");
+			//console.log("in applyOptions");
 			init();
 			if (!options.extensionEnabled || isExcludedSite()) {
 				hideHoverZoomImg();
@@ -626,29 +673,12 @@ var hoverZoom = {
 		}
 		
 		function loadOptions() {
-      console.log("in loadOptions");
-        options = {};
-        
-        options.extensionEnabled =      options.hasOwnProperty('extensionEnabled') ? options.extensionEnabled : true;
-        options.pageActionEnabled = options.hasOwnProperty('pageActionEnabled') ? options.pageActionEnabled : true;
-        options.showCaptions =          options.hasOwnProperty('showCaptions') ? options.showCaptions : true;
-        options.showHighRes =           options.hasOwnProperty('showHighRes') ? options.showHighRes : false;
-        options.addToHistory =          options.hasOwnProperty('addToHistory') ? options.addToHistory : false;
-        options.alwaysPreload =         options.hasOwnProperty('alwaysPreload') ? options.alwaysPreload : false;
-        options.displayDelay =          options.hasOwnProperty('displayDelay') ? options.displayDelay : 100;
-        options.fadeDuration =          options.hasOwnProperty('fadeDuration') ? options.fadeDuration : 200;
-        options.excludedSites =         options.hasOwnProperty('excludedSites') ? options.excludedSites : [];
-        options.whiteListMode =         options.hasOwnProperty('whiteListMode') ? options.whiteListMode : false;
-        options.picturesOpacity =       options.hasOwnProperty('picturesOpacity') ? options.picturesOpacity : 1;
-        options.showWhileLoading =      options.hasOwnProperty('showWhileLoading') ? options.showWhileLoading : true;
-        options.expAlwaysFullZoom = options.hasOwnProperty('expAlwaysFullZoom') ? options.expAlwaysFullZoom : false;
-        
-        // Action keys
-        options.actionKey =             options.hasOwnProperty('actionKey') ? options.actionKey : 0;
-        options.fullZoomKey =           options.hasOwnProperty('fullZoomKey') ? options.fullZoomKey : 90;
-        
-        console.log("applying options");
+			//console.log("in loadOptions");
+			chrome.extension.sendRequest({action : 'getOptions'}, function (result) {
+				options = result;
+				//console.log("applying options");
 				applyOptions();
+			});
 		}
 		
 		function onRequest(request, sender, sendResponse) {
@@ -659,6 +689,8 @@ var hoverZoom = {
 		}
 		
 		function windowOnDOMNodeInserted(event) {
+			//console.log("in windowOnDOMNodeInserted because of ", event);
+			event.srcElement = event.target; // FireFox compatibility fix
 			if (event.srcElement) {
 				if (event.srcElement.id == 'hzImg' || 
 					event.srcElement.parentNode.id == 'hzImg' ||
@@ -673,6 +705,7 @@ var hoverZoom = {
 		}
 		
 		function windowOnLoad(event) {
+			//console.log("in windowOnLoad");
 			prepareImgLinksAsync();
 		}
 		
@@ -761,26 +794,25 @@ var hoverZoom = {
 		}
 		
 		function init() {
-      console.log("in init()");
+			//console.log("in init()");
 			if (!window.innerHeight || !window.innerWidth) { return; }
 			
 			webSiteExcluded = null;
 			body100pct = (body.css('position') != 'static') || 
 						 (body.css('padding-left') == '0px' && body.css('padding-right') == '0px' && body.css('margin-left') == '0px' && body.css('margin-right') == '0px');
 			hz.pageGenerator = $('meta[name="generator"]').attr('content');
-      console.log("preparing image links");
+			//console.log("preparing image links");
 			prepareImgLinks();		
-      console.log("binding events");
+			//console.log("binding events");
 			bindEvents();
-      console.log("fixing flash");
+			//console.log("fixing flash");
 			fixFlash();
 		}
 		
-    console.log("Loading options");
-		//chrome.extension.onRequest.addListener(onRequest);		
+		//console.log("Loading options");
+		chrome.extension.onRequest.addListener(onRequest);
 		loadOptions();
-
-    console.log(" done");
+		//console.log(" done");
 	},
 	
 	// __________________________________________________________________
@@ -847,7 +879,7 @@ var hoverZoom = {
 	
 	// Create and displays the loading image container
 	createImgLoading: function () {
-		hoverZoom.imgLoading = hoverZoom.imgLoading || $('<div style="opacity: 0.8; padding: 0; margin: 0">...</div>');
+		hoverZoom.imgLoading = hoverZoom.imgLoading || $('<img src="' + chrome.extension.getURL('images/loading.gif') + '" style="opacity: 0.8; padding: 0; margin: 0" />');
 		hoverZoom.imgLoading.appendTo(hoverZoom.hzImg);
 	},
 	
@@ -863,13 +895,13 @@ var hoverZoom = {
 			var link = links.eq(preloadIndex++);
 			if (link.data().hoverZoomPreloaded) {
 				preloadNextImage();
-				//chrome.extension.sendRequest({action: 'preloadProgress', value: preloadIndex, max: links.length});
+				chrome.extension.sendRequest({action: 'preloadProgress', value: preloadIndex, max: links.length});
 			} else {
 				var hoverZoomSrcIndex = link.data().hoverZoomSrcIndex || 0;
 				$('<img src="' + link.data().hoverZoomSrc[hoverZoomSrcIndex] + '">').load(function() {
 					link.data().hoverZoomPreloaded = true;
 					setTimeout(preloadNextImage, preloadDelay);
-					//chrome.extension.sendRequest({action: 'preloadProgress', value: preloadIndex, max: links.length});
+					chrome.extension.sendRequest({action: 'preloadProgress', value: preloadIndex, max: links.length});
 				}).error(function() {
 					if (hoverZoomSrcIndex < link.data().hoverZoomSrc.length - 1) {
 						link.data().hoverZoomSrcIndex++;;
@@ -884,7 +916,7 @@ var hoverZoom = {
 	}
 };
 
-console.log("HZ parsed");
+//console.log("HZ parsed");
 
 // HoverZoom End
 
@@ -897,38 +929,38 @@ hoverZoomPlugins.push( {
 	name: 'Imgur',
 	version: '0.3',
 	prepareImgLinks: function(callback) {
-    console.log("Preparing image links for imgur");
-	
+	console.log("Preparing image links for imgur");
+
 		var res = [],
 			minSplitLength = 4;
-		
+
 		function prepareImgLink() {
 			var link = $(this), i = 0, data = link.data();
 			if (data.hoverZoomSrc) { return; }
 
-      console.log("Preparing", link);
-			
+			//console.log("Preparing", link);
+
 			var aHref = link.attr('href').split('/');
 			if (aHref.length < minSplitLength) { return; }
-			
+
 			if (minSplitLength == 4) {
 				// The URL may contain 'imgur.com' but we can be on another domain, so one more test
 				if (aHref[2].length < 9 || aHref[2].substr(-9) != 'imgur.com' || aHref[2] == 'api.imgur.com') { return; }
 				// Removes the first part (http://*.imgur.com)
-				for (i=0; i<3; i++) { 
-					aHref.shift(); 
+				for (i=0; i<3; i++) {
+					aHref.shift();
 				}
 			}
-			
+
 			// Excluded words
 			var excl = ['delete', 'forum', 'removalrequest', 'contact', 'upgrade', 'tools', 'stats', 'logout', 'signin', 'register', 'blog'];
 			if (aHref[0].length < 5 || excl.indexOf(aHref[0]) > -1) { return; }
-			
+
 			// This assumes that the hash length is always 5			
-			
+
 			var hash = '';
 			if (aHref.length == 1) {
-			
+
 				if (aHref[0] == 'gallery') {
 					return;
 				} else if (aHref[0].indexOf('&') > -1) {
@@ -947,7 +979,7 @@ hoverZoomPlugins.push( {
 				} else {
 					hash = aHref[0].substr(0, 5);				
 				}
-				
+
 			} else if (aHref[0] == 'gallery') {
 				hash = aHref[1].substr(0, 5);				
 			}
@@ -959,16 +991,16 @@ hoverZoomPlugins.push( {
 			data.hoverZoomSrc = srcs.concat(srcs).concat(srcs).concat(srcs);
 			res.push(link);
 		}
-	
+
 		// Every sites
 		$('a[href*="imgur.com/"]').each(prepareImgLink);
-		
+
 		// On imgur.com (galleries, etc)
 		if (window.location.host.indexOf('imgur.com') > -1) {
 			minSplitLength = 2;
 			$('a[href^="/"]').each(prepareImgLink);			
 		}
-		
+
 		if (res.length) { callback($(res));	}
 	}
 });
@@ -1000,7 +1032,7 @@ hoverZoomPlugins.push( {
 				res.push(link);
 			}
 		});
-		hoverZoom.urlReplace(res, 
+		hoverZoom.urlReplace(res,
 			'a[href*="tumblr.com/photo/"]',
 			'',
 			''
@@ -1030,10 +1062,4 @@ hoverZoomPlugins.push( {
 	}
 });
 
-
-
 hoverZoom.loadHoverZoom();
-
-
-// imgur_a.js
-
